@@ -16,10 +16,24 @@ add------>GO(全局window)
 b------>AO(自身定义AO)
         GO
 
-
 对象包装
     对象创建
     var obj = {} plainObject 对象字面量/对象直接量
     构造函数
         系统自带的函数构造 new Objcet()
         自定义函数构造
+        形参实参可以进行定义调用
+        function dmeo(color){this.color=color}
+Objcet.crate(原型)方法
+
+构造函数三段式
+函数体前面加隐式的this = {}
+执行this.xxx = xxx
+隐式返回this
+
+包装类
+new string();
+new boolean();
+new number();
+数字的对象能参与运算,一旦参与运算就彻底变成纯数字这不是对象里的数值  
+数字有原始值数字和对象数字---原始值不能有属性和方法----对象有属性和方法
