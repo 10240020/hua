@@ -1,0 +1,21 @@
+$(function(){
+    var slid = $('.slid ul li');
+    var slidlist = $('.slidlist ul li')//获取所有的ul和li
+    var slidlistbei = $('.slidlistbei ul')//获取ul
+    var js = 0,//初始化值
+    var timer = null;//定义定时器并初始化
+    slid.on(click,function(){
+        $(this).addClass('active').siblings().removeClass('active');
+        var index = $(this).index();
+        conunt = idnex;
+        slidlistbei.anmimate({'left':-count*slderwidth});
+     })
+     
+     timer = setInterval(function(){
+        count++;
+        if(count>slidlistbei.length - 1){
+            count = 0;
+         }
+         slid.eq(count).trigger('click')//返回事件
+     },2000)//timer时间为2000毫秒
+})    
