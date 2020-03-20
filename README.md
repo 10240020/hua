@@ -37,3 +37,4 @@ new boolean();
 new number();
 数字的对象能参与运算,一旦参与运算就彻底变成纯数字这不是对象里的数值  
 数字有原始值数字和对象数字---原始值不能有属性和方法----对象有属性和方法
+typeof()返回属性值类型  number string boolean undefined funcion Object等
