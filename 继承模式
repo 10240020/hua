@@ -1,0 +1,23 @@
+继承
+  传统形式-->原型链
+    过多的继承无用的属性
+  借用构造函数
+    不能继承借用构造函数的原型
+    每次构造函数都要多走一个函数
+  共享原型
+     不能随意改动自己原型
+  圣杯模式
+  function inherit(Target,Origin){
+      function f(){}
+      f.prototype = Origin.prototype;
+      Target.prototype = new F();
+      Target.prototype.constuctor = Target//在继承目标身上人为设置原型自带属性constuctor
+      Target.prototype.uber = Origin.prototype;//最终想查找原型最终初始最顶端的原型---超级父级
+      }
+      Father.prototype.listname = 'o';
+      function Father () {}
+      function son () {};
+      inherit(son,Father);
+      var son = new son();
+      var Father = new Father();
+  
