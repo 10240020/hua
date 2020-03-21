@@ -67,3 +67,6 @@ string.prototype.toString()
 
 Math.floor(向上取整)和Math.ceil(向下取整)Math.random(产生随机数)
 可正常计算的范围 小数点前16位，后16位
+
+属性私有化变量
+只有属性自身进行调用,外部访问变量,访问不了
