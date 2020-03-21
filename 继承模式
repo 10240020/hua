@@ -21,3 +21,14 @@
       var son = new son();
       var Father = new Father();
   
+闭包继承圣杯
+      var inherit = (function (){
+        var F = function () {};
+        return function (Target,origin) {
+            F.prototype = origin.prototype;
+            Target.prototype = new F();
+            Target.prototype.constuctor = Target;
+            Target.prototype.uber = origin.prototype;
+        }
+      }());
+      
