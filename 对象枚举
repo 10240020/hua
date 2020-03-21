@@ -1,3 +1,4 @@
 对象枚举//Enumeration
     for (var prop in obj){console.log(obj[prop]遍历对象每个属性只能用obj[函数空间名]进行调用对象每个值)}//遍历对象->查看对象里面的属性值及属性
-      
+    hasOwnProperty()查看有没有原型的方法
+    A instanceof B//A对象是不是B构造函数构造出来的-------->看A对象的原型链上--有没有B的原型
