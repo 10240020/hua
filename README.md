@@ -44,3 +44,26 @@ typeof()返回属性值类型  number string boolean undefined funcion Object等
 利用原型特点和概念,可以提取出共有属性
 对象查看原型->隐式属性_proto_
 对象查看构造函数-constructor
+person.prototype = {}---原型对象
+构造函数对象里的属性不能更改原型对象上的属性person.prototyoe
+继承
+
+原型链 
+大多数对象的终端都会继承Objcet.prototype
+Objcet.protoype{}是最终原型
+Objcet.create(原型)----Objcet.create()里面放原型----create是访问原型
+this指向是,谁调用这个方法,this便指向谁
+null和undefined无法调用tostring
+call()----call让某个函数或方法调用某一个特定的原型
+apply()-----必须传数组并只能传一个函数
+call()和apply()传参列表不同---改变this指向
+
+重写---javascript自身重写的六种方法
+Objcet.prototype.toString()
+number.prototype.toString()
+Aarry.prototypr.toString()
+boolaen.prototype.toString()
+string.prototype.toString()
+
+Math.floor(向上取整)和Math.ceil(向下取整)Math.random(产生随机数)
+可正常计算的范围 小数点前16位，后16位
