@@ -21,9 +21,9 @@
       var son = new son();
       var Father = new Father();
   
-闭包继承圣杯
+闭包继承圣杯----->存在私有化变量
       var inherit = (function (){
-        var F = function () {};
+        var F = function () {};//私有化变量,外部无法访问调用---->仅供自身属性调用访问.
         return function (Target,origin) {
             F.prototype = origin.prototype;
             Target.prototype = new F();
@@ -31,4 +31,9 @@
             Target.prototype.uber = origin.prototype;
         }
       }());
-      
+ 
+ 命名空间
+     在局部定义方法--->再使用立即执行函数闭包调用该方法接口return function(){函数接口}可便于进行启动该方法--->好处：处于私有化变量
+     不会污染全局变量.
+ 连续调用
+     在每一个函数里面将其return this指向自己并将其返回为调用状态,进行多次调用
