@@ -1,0 +1,16 @@
+数组常用方法
+改变数组
+    push,pop,shift,unshift,sort,reverse,
+    splice--->切片
+不可改变数组
+    concat,join-->split,tostring,slice
+    join-->连接方法  split()--->拆分连接方法
+
+push方法
+var arr = [];
+Array.prototype.push = function(){
+    for(var i = 1; i < arguments.length; i++){
+        this[this.length] = arguments[i];
+    }
+    return this.length; 
+}

@@ -1,0 +1,977 @@
+vue基本语法
+v-cloak解决网速慢请求数据慢的屏幕闪动问题 解决插值表达式闪烁问题
+v-text文本指令--默认v-text没有闪烁问题 v-text会覆盖元素中原本的内容,但插值表达式只会替换自己的这个占位符,不会把整个元素的内容清空
+v-html重点文本指令  将数据里边的元素标签渲染成为真标签
+v-bind:是vue中,提供的用于绑定属性的指令  v-bind:指令可以被简写为英文:要绑定的属性  v-bind中,可以写合法的js表达式  :title = "mytitle + 'mytitle'";
+v-model双向数据绑定
+v-mdoel可以实现表单元素和model中数据的双向绑定
+v-model只能运用在表单元素中
+v-model.lazy:惰性更新
+v-model.trim:去掉空格
+v-moedl.number:将数据转换成数值
+v-for循环语句-->该指令需要以site in sites形式的特殊语法,site是源数据数组并site是数组元素迭代的别名; 
+遍历对象身上的键值对,除val key 第三个位置还有一个索引位 v-for循环时,key属性只能使用number或string
+key使用时,必须使用v-bind属性绑定形式,指定key的值
+组件,使用v-for循环时,或者特殊情况,v-for有问题,必在使用v-for的同时,指定唯一的字符串/数字 类型: key值 
+v-bind样式绑定(当我们省略了v-bind时没有任何的区别,功能上不受影响) 绑定属性的指令
+v-on事件处理器-->可以绑定多个事件 事件绑定机制    @title = '属性名' v-on的缩写 使用事件绑定机制,为元素指定处理的时候,如果加小括号便可给函数传参数
+v-on事件修饰
+.stop阻止冒泡
+.prevent默认阻止事件
+.capture添加事件侦听器的使用事件捕获模式
+.self只当前事件在该元素本身(不是子元素)触发时触发回调,阻止自己当前事件
+.once事件只触发一次 
+methods:{ //methods属性定义了当前vue实例所有可用的方法
+  属性名:fucntion(){
+    方法
+  }
+}
+v-once一次性执行插值,当数据改变时,插值处的内容不会更新,会影响到该节点上的其它数据绑定
+v-HTML输出真正的HTML
+<p>Using mustaches: {{ rawHtml }}</p>
+<p>Using v-html directive: <span v-html="rawHtml"></span></p>
+span的内容将会被替换成为属性rawhtml,直接作为html--会忽略解析属性值中的数据绑定.不能使用v-html来复合局部模板,vue不是基于字符串的模板引擎.组件更适合作为可重用和可组合的基本单位
+站点上动态渲染的任意html会非常危险,会导致xss攻击,只对可信任内容使用html插值,不要对用户提供的内容使用插值
+MVC是后端的分层开发概念
+MVVM是的前端视图层的概念,主要关注于视图分离,MVVM把前端分为三部分,model,view,vm viewModel
+
+属性绑定设置class样式
+直接传递数组,需要class使用v-bind样式绑定
+<h1 v-bidn:class = '['thin','italic']'></h1>
+数组三元表达式
+<h1 v-bidn:class = '['thin','italic', flag?'active':'']'></h1>
+对象表达式
+<h1 v-bidn:class = '['thin','italic', {flag:'active'}]'></h1>
+class使用v-bind绑定对象时候,对象的属性是类名,由于对象的属性可带引号,也可不带引号
+<h1 :class = 'beishi'></h1>//在数据上定义样式,后直接调用数据属性名即可
+<script>
+  var vm = new Vue({
+    el: '',
+    data:{
+      beishi: {thin:true , italic:true, flag:false , active:false},
+    }
+  })
+</script>
+
+v-if:每次都会重新删除或创建元素---有较高的切换性能消耗
+v-show:不会重新进行dom删除或创建元素,只切换了元素的display:none样式---较高的初始渲染消耗
+元素涉及到频繁切换,最好使用v-show
+元素永远不会显示出来则使用v-if
+
+some()方法测试数组中是不是至少有1个元素通过了被提供的函数测试.它返回的是一个Boolean类型的值.
+this.xxx.some() //根据指示的条件随时进行判断,返回为trun便终止函数some()
+findlndex()方法返回传入一个测试条件(函数)符合条件的数组第一个元素位置
+findlndex()方法为数组中的每一个元素都调用一次函数执行--对于空数组,函数是不会执行---并没有改变数组的原始值
+当数组中的元素在测试条件时返回true时,findlndex()返回符合条件的元素的索引位置,之后的值不会再次调用执行函数
+如果没有符合条件的元素返回-1
+
+ES6中为字符串提供了新方法,string.portotype.includes('')
+ES6新方法filter循环
+
+过滤器:可以用作常见的文本格式化.用在mustache插值和v-bind表达式,过滤器应该添加在javascript表达式尾部 replace()
+过滤器方法
+var.filter('',fucntion(){
+  var xx = new data(daterstr)
+  var xx = x.getfullyear()
+})
+
+全局过滤器,时间格式化
+vue.filter('dateFromat',fucntion(daterstr,pattern=''){
+    var dt = new date(datastr)//根据给定的时间字符串,得到特定的时间
+    var d = dt.getfullyear()+1
+    var x = dt.getdate()
+    var v = dt.getfullyear()
+    return `${d}+${x}+${v}`,;
+
+  if(pattern && pattern.tolowercase() === ''){//取到所有英文字符的值并进行转换成小写
+    return `${d}+${x}+${v}`;
+  }else{
+    var h = dt.getfullyear()
+    var v = dt.getdate()
+    var c = dt.getfullyear()
+  }
+})
+
+全局过滤器,所有的vm实例都共享
+
+私有化过滤器---过滤器调用,采用就近原则,私有过滤器跟全局过滤器名称相同,优先调用私有过滤器
+var vm2 = new Vue({
+  el: '',
+  data:{
+    dt:new data()
+  },
+  methods:{}
+  filters:{//私有化过滤器 有两个条件[过滤名称+处理函数]
+    dateFromat:fucntion(){.....初始化方法}
+  }
+})
+
+字符串padstart---在时间构造时候需要在前补0,可采用padstart(2，'0')--在前面两位补0--必须是字符串
+键盘事件绑定敲击事件监听
+@keyup.enter = '绑定的执行方法'
+自定义键盘绑定事件
+vue.config.keycodes.键盘号 =  对应的键盘码
+
+定义全局指令
+指令的名称,在定义时,指令的名称前面,不需要加V-前缀
+调用时,必须在指令前面添加V-前缀来进行调用
+参数2.必须是一个对象,对象上有相关的指令函数
+在每个函数中,第一个参数必须是el,表示绑定了指令的元素,el参数,是一个原生js对象
+vue.directive('',{})//自定义指令
+bind:fucntion(){}//当指令绑定到该元素上的时候,会立即执行bind函数,只执行一次
+inserted:fucntion(){}//inserted元素插入到dom中时,会执行inserted函数
+updated:function(){}//当vnode更新时,会执行updated,可能会触发多次
+
+自定义样式指令
+vue.directive('',{
+  //样式,通过指令绑定了元素,不管元素有没有被插入进页面中,这个样式在内部产生了一个内联样式
+  //将来元素会被浏览器渲染引擎进行解析应用给该元素并显示在页面中
+  bind:fucntion(el){//传入Element
+    el.xxx.xxx = ''
+  }
+  代码简写
+  '':fucntion(el,binding){//此function等同于把代码写到bind和update钩子函数中
+    el.xxx.xxx = parseInt(binding.value) + 'px'//取整数
+  }
+})
+
+在beforeCreate生命周期函数执行时,data和methods中的数据还未被初始化
+在created生命周期函数执行时,data和methods中的数据已初始化完毕
+如果要调用methods方法,data数据,最早,只能在create中进行调用
+beforemount第三个生命周期函数,模板已内存中编辑完成,但尚未把模板渲染到真正的页面中去
+在beforemount执行时,页面中的元素,还未被真正替换,前一刻的模板字符,即将进行挂载并其渲染
+mounted第四个生命周期函数,内存中的模板,已完成挂载并已完成渲染到页面中,用户可以看到渲染完成后最新页面
+mounted已是创建期间最后一个生命周期函数,当执行完毕mounted,实例已完全创建完成并已挂载,无其他操作,实例便处于内存等待
+需要通过某些插件操作页面中的dom节点时,最早在mounted中进行操作
+
+beforeupdate和updated会根据data数据来进行有选择性的触发0次到多次数据更新
+beforeupdate被执行时,页面中显示的数据是为更新的数据,data数据以是更新数据,页面尚未和最新数据保持同步
+updated事件执行时,页面和data数据保持同步
+
+beforeDestroy执行时,vue实例就已从运行阶段,进入到销毁阶段
+beforeDestroy执行时,实例上所有的数据及指令...处于可用状态,此时,还为真正进行销毁过程
+destroyed执行时,实例已进行销毁,所有指令和数据已开始进行销毁
+
+vue-resource、`axios` 数据请求
+vue-resource依赖于vue,先后顺序不能颠倒
+this.$http.xxx(发起请求)
+this.$http.xxx((URl地址),(可选参数)).then(successCallback(成功回调必须写回调),errorCallback(可选回调))服务器返回数据
+
+<div id=''#app>
+  <input value='' @click='get'>
+</div>
+
+//通过全局配置,请求数据接口根域名,则,在每次单独发起http请求时候,请求的url路径,应该以相对路径开头,不能带/(根路径号),否则不会启用根路径拼接
+Vue.http.options.root = 'http//xxx.xxx/';
+vue.http.options.emulateJSON = ture;
+var app = new Vue({
+  el:'#app',
+  data: {},
+  methods:{
+    get:{//发起请求
+        this.$http.get('http://xxx.xxx/xxx/xxxx').then(function(){//发起请求,通过.then来设置成功回调函数
+            //通过result.body拿到服务器返回的数据
+            //console.log(then.body)
+        })
+    },
+    post:{//发起post请求
+      //通过post方法第三个参数,{emulateJSON:true}设置提交的内容类型为普通表单数据格式进行提交
+      this.$http.post('http//xxx.xxx/xxx/xxxx',{},{}(post请求不能省略{},{emulateJSON:true})).then(function(){//手动发起的post请求,默认没有表单格式.有的服务器无法处理 
+        //console.log()
+      })
+    },
+    jsonp:{
+      this.$http.jsonp('http//xxx.xxx/xxx/xxxx').then(result =>(箭头函数为匿名函数){
+        console.log()
+      })
+    }
+  }
+})
+
+var app = new Vue({
+  el:'#app',
+  data: {},
+  created(){//当vm实例的data和methods初始化完毕后,vm实例会自动执行created生命周期函数
+    this.getlist()
+  }
+  methods:{
+    getlist(){
+        //导入vue-resource包,可直接通过this.$http来发起数据请求
+        //根据接口API文档,知道,获取列表的时候,发起一个get请求
+        //this.$http.get().then(fucntion(){})
+        //通过then指定回调函数之后,在回调函数中,可以拿到数据服务器返回result
+        //判断result.status是否等于0,等于0,数据返回成功,先把result.messge赋值给this.list;不等于0,可以弹窗提醒,获取数据失败
+        this.$http.get('http//xxx.xxx/xxx/xxxx').then(result=>{
+          let result = result.body//通过$http获取到的数据,都在result.body中存放
+          if(result.status === 0){
+            this.list = result.message
+          }else{
+            alert()
+          }
+        })
+    },
+    add(){
+      //查看数据API,发现,发送一个post请求,this.$http.post
+      //this.$http.post()接受三个参数
+      //    请求url地址
+      //    提交服务器数据,以对象形式提交服务器(name:this.name)
+      //    配置对象,以xx表单提交{emulateJSON:true},普通表单进行提交,将数据提交给服务器application/x-www-from-urlencoded
+      //post方法中,使用.then来设置成功回调函数,如果想要拿到成功结果,需要result.body
+      this.$http.post('http//xxx.xxx/xxx/xxxx',{name = this.name}, {emulateJSON:true}).then(result =>{
+        if(result.body.status == 0){
+          //添加完成,需手动调用getlist就能刷新产品列表
+          this.getlist()
+          this,name = ''
+        }else{  
+          alert()
+        }
+      })
+    },
+    del(id){
+      this.$http.get('http//xxx.xxx/xxx/xxxx' + id).then(result =>{
+        if(result.body.status === 0 ){
+          this.getlist()
+        }else{
+          alert()
+        }
+      })
+    }
+  }
+})
+
+动画
+transition元素,vue官方提供一个标签
+自定义v-前缀  my-(不同组动画实现效果)
+
+钩子函数半场动画
+@before-enter="beforeenter"//进场动画函数
+@enter ="enter"
+@after-enter = "afterenter"
+
+离场动画函数
+
+
+钩子函数半场动画
+<div id="app">
+    <input type="button" value="" @click="flag = !flag">
+    <transition>
+      <div class="ball" v-show="flag"></div>
+    </transition>
+</div>
+
+<script>
+//实例
+var vm = new Vue({
+  el: '',
+  data:{
+    flag:false;
+  }
+  methods:{
+    //钩子函数第一个参数:el,执行动画的dom元素,原生的js dom对象
+    //document.getelementbyid()原生js对象
+    beforeenter(el){
+      //beforeenter动画入场,此时,动画尚未开始,可以beforeenter中,设置元素开始动画之前的起始样式
+      //动画开始前起始位置
+      el.style.tranform = "translate(0,0)"
+    }
+    enter(el,done){
+      //el.offsetwidth会强制动画刷新
+      el.offsetwidth
+      //enter动画开始之后样式,可以设置小球完成动画之后,结束状态
+      el.style.tranform = "translate(150rem,450rem)"
+      el.style.transition = "all 1s seae"
+
+      //done是afterenter函数引用
+      done()
+    }
+    afterenter(el){
+      //动画完成,会调用afterenter
+      tihs.flag = !tihs.flag
+    }
+  }
+})
+
+</script>
+
+transition-group//元素作为多个/组件的过渡效果.渲染一个真实dom元素.默认渲染<span>,可以通过tag属性配置那个元素应该被渲染
+每个transition-group的子节点必须有独立的key,动画才能正常运行
+transition-group通过css transform过渡移动,当一个子节点被更新,从屏幕上的位置发生变化,会被应用一个移动中的css类(通过：name属性或配置move-class属性自动生成).
+通过css transform属性可渡过属性,当移动类时,将会使用flip技术使元素流畅地到达动画终点
+transition-group添加appear属性作为入场动画效果
+tag=""指定transition-group将渲染出标签,不指定默认渲染出span标签
+
+
+vue组件模块化
+组件的出现,为拆分vue实例的代码量,能够让我们以不同组件,划分不同的功能模块,需要什么样的功能,直接调用对应的组件即可
+组件化和模块化不同
+  组件化:从代码逻辑角度进行划分:方便代码分层开发,保证每个功能的职能单一
+  模块化:从ul界面的角度进行划分:前端的组件化,方便ul组件的重用
+
+组件的创建
+<script>
+  //使用vue.extend创建全局的vue组件
+  let coml = vue.extend({
+    template:''//通过template属性,指定组件的展示html结构
+  })
+  //使用vue.component('组件名称',创建出来的模板对象)
+  //使用vue.component定义全局组件的时候,组件名称使用了驼峰命名,则在引用组件的时候,需要把大写的驼峰改小写,同时,两个单词之前,使-链接;
+  //不使用驼峰,则直接拿名称来使用即可
+  vue.component('',coml)
+
+  简化
+  不在需要中间件接收,直接传递
+  vue.component('',vue.extend({
+    template:''//通过template属性,指定组件的展示html结构
+  }))
+
+  vue.component第一个参数:组件的名称,将来在引用组件时,以一个标签形式来引入
+  第二个参数:vue.extend创建组件,其中template组件将来要展示的html内容
+
+  vue.component('',{
+    //无论那种方式创建的组件,组件的template属性指向的模板内容,必须有且只能有唯一的一个根元素
+    template:'<div>
+                <h3></h3>
+                <span></span>
+              <div>'
+  })
+
+  vue.component('',{
+    //在被控制的#app外面,使用template元素,定义组件的html模板结构
+    template:'#tmpl'
+  })
+
+  //components私有化组件
+
+  // Vue方法
+  // data:{}数据
+  // methods:{}方法
+  // filters:{}钩子函数
+  // directive:{}命令组件
+  // components:{}自定义私有化组件
+  components:{
+    template:'<h1></h1>'
+  }
+
+  vue.component('',{
+    //组件有自身的data数据
+    //组件的data和实例的data不一样,实例中的data可以作为一个对象,但组件中的data必须是一个方法
+    //组件中的data除必须为一个方法之外,该方法内部,还必须返回一个对象即可,
+    //组件中的data数据,使用方式和实例全局中的data数据使用一致
+    template:'<h1></h1>'
+    data:fucntion(){
+      return:{
+        msg:''数据
+      }
+    }
+  })
+
+  var dataobj  = {cont:0};
+  vue.component('',{
+    template:'#',
+    data:fucntion(){
+      //return dataobj;
+      return {count:0}//return{}数据不会出现共享,单独出现数据
+    },
+    methods:{
+      increment(){
+        this.cont++
+      }
+    }
+  })
+
+  //组件切换
+  <div id="">
+      <a href="" @click.prevent="falg=ture"></a>
+      <a href="" @click.prevent="falg=ture"></a>
+      <s v-if="falg"></s>
+      <x v-else="falg"></x>
+  </div>
+
+  vue.component('x',{
+    template:''
+  })
+  vue.component('s',{
+    template:''
+  })
+
+  //component,vue提供来展示对应的名称的组件
+  //component属一个占位符:is属性,可用来指定需展示的组件名称
+  <component :is='componentid'></component>
+
+  <div id="">
+      <a href="" @click.prevent="componentid=x"></a>
+      <a href="" @click.prevent="componentid=s"></a>
+  </div>
+  vue.component('x',{
+    template:'componentid'
+  })
+  <transition mode='out-in'></transition>//通过mode属性,设置组件切换方式
+
+
+</script>
+
+
+
+
+
+参数
+一些指令能够接收一个参数,在该指令名称之后以冒号表示,v-bind指令用于响应式的更新HTML
+v-bind:href  href是参数,告知v-bind指令将该元素href与表达式url的值绑定
+v-on指令,它用于监听DOM事件
+
+动态参数2.6新增方法
+
+
+计算属性与监听器
+<div id="example">
+  {{ message.split('').reverse().join('') }}
+</div>
+上段代码,模板不是简单的声明逻辑.这里显示变量message的翻转字符串.当要在模板中多次引用此代码的翻转字符串时,更加难以处理.
+
+基础计算属性例子
+<div id="example">
+  <p>Original message: "{{ message }}"</p>
+  <p>Computed reversed message: "{{ reversedMessage }}"</p>
+</div>
+var vm = new Vue({
+  el: '#example',
+  data: {
+    message: 'Hello'
+  },
+  computed: {
+    // 计算属性的 getter
+    reversedMessage: function () {
+      // `this` 指向 vm 实例
+      return this.message.split('').reverse().join('')
+    }
+  }
+})
+上面代码声明了一个reversedMessage.提供的函数将作为属性vm.reversedMessage的getter函数.
+vm.reversedMessage的值取决于vm.message的值,可以像绑定普通属性一样绑定计算属性,vue了解vm.reversedMessage == vm.message,因此vm.message发生改变时,所有依赖于vm.reversedMessage绑定也会
+实时更新.声明创建这种依赖关系:计算属性的getter函数是没有副作用,方便于更新与测试
+
+计算属性与方法
+<p>Reversed message: "{{ reversedMessage() }}"</p>
+// 在组件中
+methods: {
+  reversedMessage: function () {
+    return this.message.split('').reverse().join('')
+  }
+}
+同一函数定义一个方法而不是计算属性.最终结果确认相同,不同计算属性是基于它们的响应式依赖进行缓存,只在相关响应式依赖发生改变才会重新求值,意味着只要message还没发生改变,多次访问reversed
+Message计算属性会立即返回之前计算结果.不必再次执行函数
+
+不依赖响应式
+computed: {
+  now: function () {
+    return Date.now()
+  }
+}
+上面代码意味着计算属性不再更新,date.now()不依赖响应式
+每当触发重新渲染时,调用方法将会再次执行调用执行函数
+
+计算属性与侦听属性
+提供通用方式观察和响应vue实例的数据变动:侦听属性.有数据需要随着其它数据变动而变动,很容易滥用watch--回调,更好的是使用计算属性回调
+watch回调与计算属性回调例子
+<div id="demo">{{ fullName }}</div>
+var vm = new Vue({
+  el: '#demo',
+  data: {
+    firstName: 'Foo',
+    lastName: 'Bar',
+    fullName: 'Foo Bar'
+  },
+  watch: {
+    firstName: function (val) {
+      this.fullName = val + ' ' + this.lastName
+    },
+    lastName: function (val) {
+      this.fullName = this.firstName + ' ' + val
+    }
+  }
+})
+
+计算属性回调
+var vm = new Vue({
+  el: '#demo',
+  data: {
+    firstName: 'Foo',
+    lastName: 'Bar'
+  },
+  computed: {
+    fullName: function () {
+      return this.firstName + ' ' + this.lastName
+    }
+  }
+})
+
+计算属性的setter
+计算属性默认只有getter,另一个属性setter
+computed: {
+  fullName: {
+    // getter
+    get: function () {
+      return this.firstName + ' ' + this.lastName
+    },
+    // setter
+    set: function (newValue) {
+      var names = newValue.split(' ')
+      this.firstName = names[0]
+      this.lastName = names[names.length - 1]
+    }
+  }
+}
+运行vm.firstName = 'john dog'时,setter会被调用,vm.firstName和vm.lastName也会实时更新
+
+侦听器
+计算属性大多数情况更合适,也需要一个侦听器,watch提供了一个通用方法,来响应数据变化,当需要在数据变化时执行异步或开销较大侦听器方式最好的
+<div id="watch-example">
+  <p>
+    Ask a yes/no question:
+    <input v-model="question">
+  </p>
+  <p>{{ answer }}</p>
+</div>
+<!-- 因为 AJAX 库和通用工具的生态已经相当丰富，Vue 核心代码没有重复 -->
+<!-- 提供这些功能以保持精简。这也可以让你自由选择自己更熟悉的工具。 -->
+<script src=""></script>
+<script src=""></script>
+<script>
+var watchExampleVM = new Vue({
+  el: '#watch-example',
+  data: {
+    question: '',
+    answer: 'I cannot give you an answer until you ask a question!'
+  },
+  watch: {
+    // 如果 `question` 发生改变，这个函数就会运行
+    question: function (newQuestion, oldQuestion) {
+      this.answer = 'Waiting for you to stop typing...'
+      this.debouncedGetAnswer()
+    }
+  },
+  created: function () {
+    // `_.debounce` 是一个通过 Lodash 限制操作频率的函数。
+    // 在这个例子中，我们希望限制访问 yesno.wtf/api 的频率
+    // AJAX 请求直到用户输入完毕才会发出。想要了解更多关于
+    // `_.debounce` 函数 (及其近亲 `_.throttle`) 的知识，
+    this.debouncedGetAnswer = _.debounce(this.getAnswer, 500)//用户填写完等待时间为500毫秒
+  },
+  methods: {
+    getAnswer: function () {
+      if (this.question.indexOf('?') === -1) {//返回某个指定的字符索引
+        this.answer = 'Questions usually contain a question mark. ;-)'//返回字符的索引并打印出索引的赋值
+        return
+      }
+      this.answer = 'Thinking...'
+      var vm = this
+      axios.get('https://yesno.wtf/api')
+        .then(function (response) {
+          vm.answer = _.capitalize(response.data.answer)
+        })
+        .catch(function (error) {
+          vm.answer = 'Error! Could not reach the API. ' + error
+        })
+    }
+  }
+})
+</script>
+上面代码中,使用watch选项允许我们执行异步操作,限制执行该操作的频率,并在我们得到最终结果前,设置中间状态,这些都是计算属性无法办到的.
+出watch选项之外,还可以使用命令方法vm.$watch API.
+
+class与style绑定
+绑定html class
+对象方法
+我们传给v-bind:class一个对象,一动态地切换class
+<div v-bind:class="{ active: isActive }"></div>
+代码表示active这个class存在与否将取决与数据属性isActive的truthiness
+在对象传入更多属性来动态切换多个class.v-bind:class指令也可与普通class共存
+
+语法分为三类
+对象语法
+v-bind:class="{ active: isActive, 'text-danger': hasError }"
+数组语法
+<div v-bind:class="[activeClass, errorClass]"></div>
+三元表达式
+<div v-bind:class="[isActive ? activeClass : '', errorClass]"></div>
+
+内联样式
+对象语法
+v-bind:style的对象语法看着跟css一样,其实是一个javascript对象,属性名可以使用驼峰式或短横线分隔来命名
+<div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }"></div>
+数组语法
+v-bind:style数组语法可以多个样式对象应用到同一个元素
+<div v-bind:style="[baseStyles, overridingStyles]"></div>
+
+自动添加前缀
+v-bind:style需要添加浏览器引擎前缀的css属性时,vue.js会自动侦测并添加相应的前缀
+
+多重值2.3++新增方法
+2.3新增方法可以为style绑定中的属性提供一个包含多值数组,提供多个自带前缀值.
+<div :style="{ display: ['-webkit-box', '-ms-flexbox', 'flex'] }"></div>
+
+条件渲染
+v-if指令条件性渲染一块内容.也可以用else添加一个块渲染--(ps:类似于javascript(if else判断语句))
+
+<template>元素使用v-if条件渲染分组
+v-if指令,必须将它添加到元素上,切换多个元素,此时可以把一个<template>元素当做不可见元素包裹,并使用v-if.最终渲染结果将不包括<template>元素
+v-else元素必须紧跟在v-if或v-else-if元素,否则不会识别
+
+v-else-if2.1新增方法
+v-else-if(ps:javascript判断语句(if()else()))一致用法
+
+key管理可复用的元素
+vue会尽可能高效渲染,通常复用已有元素不是从头开始渲染,使vue变得更快.
+
+
+
+
+
+vue.js为我们封装了两个方法 
+一是prevent.prevent阻止点击跳转链接
+二是stop.stop停止冒泡事件
+所有的事件放在methods里
+
+选项/DOM/挂载
+el:''类型:string/Element  
+限制:只能用在new创建的对象实例上面
+提供一个页面已存在的DOM元素作为VUE实例的挂载目标.可以是css选择器,也可以是HTMLelment实例
+在挂载实例后,元素可以用vm.$el访问.
+如果在实例化时存在这个选项,实例将立即进入编译过程,否则,需要显示调试vm.$mount()手动开启编译
+提供的元素只能作为挂载点.不同于vue 1.x,所有的挂载元素会被vue生成的DOM替换.因此不挂载root实例到<html>或<body>上
+如果render函数和template属性都不存在,挂载DOM元素的HTML会被提取出来用作模板,此时,必须使用runtime+compiler构建vue库
+
+template类型:string
+一个字符串模板作为vue实例的标识使用.模板将会替换挂载的元素.挂载元素的内容都将被忽略,除非模板的内容有分发插槽
+值以#开始,则它将被作用选择符,并使用匹配元素的innerhtml作为模板.常用的技巧<script type="x-template">包含模板
+
+render类型(creatElement:()=>vnode)=>vnode
+字符串模板的代替方案,允许你发挥javascript最大编程能力.该渲染函数接受一个creatElement()方法作为第一个参数来创建vnode
+组件是一个函数组件,渲染函数还会接收一个额外的context参数,为没有实例的函数组件提供上下执行文
+vue选项中的render函数存在,则构造函数不会从template选项或通过el选项指定的挂载元素中提取html模板编译渲染函数
+
+
+
+
+生命周期
+所有的生命周期自动绑定this执行上下文,因此可以访问数据,对属性方法进行计算.意味着不能使用this函数来定义一个生命周期方法
+beforeCreate类型:fucntion(){}
+在实例初始化之后,数据观测(data obsever)和event/watcher事件配置之前被调用
+
+created类型:fucntion(){}
+在实例创建完成后被立即调用.在这一步,实例已完成配置:数据观测(data obsever),属性和方法的运算,watch/event事件回调,然而,挂载还未开始,$el属性目前尚不可用
+
+beforeMount类型:fucntion(){}
+在挂载开始之前被调用:相关的render函数首次被调用,该周期在服务器端渲染期间不被调用
+
+mounted类型:fucntion(){}
+实例被挂载  调用,这时el被新创建的wm.$el替换.如果根实例挂载到一个文档内的元素上,当mounted被调用时wm.$el也在文档内.
+mounted不会保证所有的子组件也都一起挂载.希望等到整个视图都渲染完毕可以在mounted内部使用vm.$nextTick
+mounted:function(){
+    this.$nextTick(fucntion(){
+    })
+}
+该周期在服务器端渲染期间不被调用
+
+beforeUpdata类型:fucntion(){}
+数据更新时调用,发生在虚拟DOM打补丁之前.适合在更新之前访问现有DOM,比如手动移除已添加的事件监听.
+该周期在服务器端渲染期间不被调用,因为只有初次渲染会在服务器运行
+
+updated类型:fucntion(){}
+由于数据更改导致虚拟的DOM重新渲染和打补丁,在这之后会调用update
+当这个update被调用时,组件DOM已更新,so现在可以执行依赖于DOM的强大操作,然而在大多数情况下,应该避免在此期间更改状态.要改变相应状态,通常最好使用计算属性或watcher取而代之
+注意updated不会保证所有的子组件也都会被一起被重新绘制.希望等到整个视图都渲染完毕可以在updated内部使用vm.$nextTick
+updated:function(){
+    this.$nextTick(fucntion(){
+    })
+}
+该周期在服务器端渲染期间不被调用
+
+activated类型:fucntion(){}
+被keep-alive缓存的组件激活调用
+该activated在服务器端渲染期间不被调用
+
+beforeDestroy类型:fucntion(){}
+实例销毁之前调用.这一步,实例仍然可以使用
+该beforeDestroy在服务器端渲染期间不被调用
+
+destroyed类型:fucntion(){}
+实例销毁后被调用.该destroyed被调用后,对应vue实例的所有指令被解除,所有的事件监听器被移除,所有的子实例也都被销毁
+该destroyed在服务器端渲染期间不被调用
+
+errorCaptured2.5新增方法类型:(err Error Vm component info string)=>?boolean--->捕捉方法
+当捕获一个来自子孙组件的错误信息被调用.该方法会受到三个参数:错误对象、发生错误的组件实例以及一个包含错误来源信息的字符串.该方法可以返回false以阻止该错误继续向上传播
+可以在此方法中修改组件的状态.因此捕获错误时,在模板或渲染函数中有一条件判断来绕过其它内容很重要,不然该组件可以会进入一个无限循环的渲染.
+错误传播规则
+默认情况下,如果全局的config.errorHandler被定义,所有的错误仍然会发送,因此这些错误信息仍然会单一的分析服务的地方进行汇报
+
+
+
+MVVM模式
+model模型:机器可读性强的数据,一般从后端传数据
+view视图:人可读性强的数据,一般是页面渲染的数据
+viewModel视图模型(核心):指代数据的双向绑定,包括数据绑定(模型转化为视图)、事件监听(视图转化为模型)
+model:指代js中的数据
+view:页面中的数据
+viewModel:指代vue实例化对象
+vue通过MVVM模式实现代码的可维护性、可拓展性、安全性.jQuery没有实现对业务逻辑分层,可维护性、可扩展性、安全性较低.
+
+视图绑定$el
+$el属性实现视图绑定给vue实例化对象,其属性可以是常用的class选择器、id选择器、类选择器、标签选择器、自定义选择器等.
+其中自定义标签选择器是为组件使用的,否则会警告,如果一个vue实例化对象对应多个选择器,渲染第一个,后边会被忽略,所以一定是一个选择器对应一个vue实例化对象(在一个项目中,尽量只有一个vue实例化)
+
+数据绑定_data
+_data属性实现模型中的数据绑定给Vm(vue实例化对象),两种方法绑定:1.将数据直接存在_data中;2.将数据对象单独定义,并将数据中的每一个属性及其值进行绑定给vue实例化对象,不区分类型始终保持同步,而
+传统对象的'绑定':值类型复制双份,互不影响;引用类型引用,即是同一份数据);
+数据丢失
+    视图数据丢失
+    只要绑定视图的时候没有定义的数据,在后期新添加出来(不管是直接属性还是间接属性),页面都不会进行渲染.
+
+    模型数据丢失
+    对于第二种绑定数据的方法,在绑定数据的时候没有定义的数据,不管是在数据对象还是VUE实例化对象中添加新的(直接)属性,都不会同步的;
+    数据的绑定是单向的,数据流只能从模型流向视图,而要从视图流向模型需要事件监听,注:不同的对象一定不要重名
+
+插值(静态数据绑定)
+插值的作用是将vm中的数据渲染到页面中,语法:{{插值内容}}.插值语法提供了一个js环境,因此可以在插值语法中使用js表达式
+而目前vue2.0不支持属性插值,要使用属性插值需要v-bind指令,可以让属性值变成一个js环境,这样就能使用vm中的数据变量.
+语法糖是指对某个功能的简化,
+
+动态数据绑定(计算数据属性)
+渲染页面的时候,有两次可以更改数据的时间点
+    若在data绑定的数据获取之后,页面渲染过程中,修改数据,只能通过插值插值表达式或插值过滤器来进行修改,数据是在模板中修改,只能在模板中应用.
+    若要在数据获取之前将其改变,就可以使用动态数据绑定的语法.数据是在获取之前修改,可以应用到任何地方.
+        相对于动态数据绑定来说,通过data绑定的数据是静态绑定的,两者语法相似.都会将数据直接添加给vue实例化对象
+动态绑定通过computed,和data一样,其属性也是对象,包括两个对象成员
+    key表示属性名称,会添加给vue实例化对象作为data属性
+    value是一个函数,对于不变的数据只能执行一次,之后的直接使用之前的执行结果,当数据发生改变的时候才会再次执行
+value函数获取vue中的函数有两种方式
+    通过参数---vue实例化对象,是面向过程
+    通过作用域this访问实例化对象,是面向对象的
+        参数是vue实例化对象:作用域是vue实例化对象;返回值是获取的数据
+
+数据双向绑定
+数据由模型到视图(数据绑定和插值)
+数据由视图到模型(事件监听)
+vue提供了一个指令v-model指令,实现数据的双向绑定的功能,v-model的属性值就是绑定的数据,也是js环境,可以直接使用js表达式
+
+绑定类
+在项目中时常绑定操作元素的类,因此我们要绑定类
+    v-bind:class=[]
+    数组每一个成员代表一组类,成员可以出现空格,表示多个类
+    v-bind:class={}
+    对象中key表示类的名称,可以出现空格,表示多个类.注意:当类名出现"-"来分割多单词时,类名需要加单引号
+    value是一个布尔值,true表示保留这个类,false删除这个类
+    v-bind:class=''
+    字符串中类之间要用空格隔开
+
+绑定样式
+跟类一样,会经常操作dom样式,
+    v-bind:style = []
+    每一个成员是一个对象,表示一组样式
+    带有'-'的样式名称改用驼峰命名
+    v-bind:styel = {}
+    每一个成员表示一个样式
+    带有'-'的样式名称改用驼峰命名
+    v-bind:styel = '行内样式字符串'
+    字符串加引号,变量不加引号
+
+指令
+v-if
+可以控制标签元素是否创建.true表示创建标签,false删除标签(真正创建与删除,并不是想设置display样式的显隐式),创建v-else中的元素
+v-show
+显示或隐藏标签元素,是设置的样式,而不是创建或删除元素,其原理是将样式切换到display:none;
+
+模板指令
+以上vue提供的指令都只是能控制一个标签元素,想控制多个样式标签,vue推荐使用H5模板中标签template
+templat特点:是一个模板标签,跟普通dom元素一样,可以添加属性,样式等,唯一的区别不会渲染到页面中
+
+v-for循环语句
+循环创建DOM元素
+    v-for = 'item in data'
+    其中循环变量item为数组中的每一个成员,data为要遍历的聚合数据(数组)
+    v-for = '(item.index) in data'
+    其中index就是索引值,其余同上
+    循环变量和索引值只能在循环中使用
+    同样也可以借助template来控制多个标签元素
+
+父子组件传值
+传值分为两种:子组件向父组件(事件传值);父组件向子组件传值(属性传值props).
+
+事件传值
+子组件向父组件传值
+
+页面间传值
+路由跳转的时候传递参数给下一个页面
+
+
+
+javascript Vue方法
+var app = new Vue({//通用方法
+    el:'???',//el属性必须是字符串形式
+    date:{
+        参数名:属性、数组、对象等参数
+    }
+})
+
+view视图绑定
+<div id="">{{msg}}</div>
+<div class="ickt">{{msg}}</div>
+<h1>{{msg}}</h1>
+<ickt>{{msg}}</ickt>
+<div class="ickt">{{msg}}</div>
+<script>
+    <script>
+    var date{
+        msg:""//设置数据
+    }
+
+    var app = new Vue({
+        el:""//双向绑定
+        data:data
+    })
+
+    setTimeout(fucntion(){
+        data.msg : ""//直接获取数据进行操作
+    },2000)//2000毫秒自行操作
+    </script>
+</script>
+
+解决数据丢失
+视图数据丢失解决方法
+模型数据丢失,在绑定之前先定义属性(不可赋值)即可解决数据丢失
+<script>
+    <script>
+        var data = {//设置数据
+            msg: ""
+            arr:[],
+            obj{
+                title:'VUE',
+            }
+        }
+        var app = new Vue({//viewModel,双向绑定数据 
+            el:'',
+            data:data//将传统数据对象的属性及其值绑定给vue
+        })
+        data.msg = '';
+        data.obj.title = ''
+        app.arr = ['red','bule']
+        console.log('')
+
+        app.mycolor = ''//为vue实例化对象添加直接新的属性
+        console.log()
+
+        data.color = ''//为数据对象添加直接新属性
+        console.log()
+
+        app.obj.num = 300//添加一个间接新属性
+        app.arr = []
+        console.log()
+        console.log()
+    </script>
+    <script>
+        var data = {
+            borderColor : ''
+            obj{
+                num:,
+                arr:[],
+            }
+        }
+
+        //浅度拷贝
+        var text = {},//绑定对象
+        text.borderColor = data.borderColor;
+        text.obj = data.obj
+        data.borderColor = ''//分别修改两个数据对象的值类型互不影响
+        data.obj.num = ,//分别修改两个数据对象的引用类型值即为修改同一份属性值,始终保持同步
+        console.log()
+    </script>
+
+    <script>
+        var data = {//设置数据
+            msg: ""
+        }
+        var app = new Vue({//viewModel双向数据绑定
+            el : ''
+            data:data//传统的data数据对象的属性及其值绑定给VUE
+        })
+        var view = docunment.getElementById();//修改视图中的数据,模型中的数据不改变 
+        setTimeout(fucntion(){
+            view.innerHTML = ''
+        }，2000)
+        console.log()
+        console.log()
+    </script>
+
+    <script>
+        //car生产车间类似....对象
+        var data = {
+            msg:''
+            color:''
+            width:''
+            height:''
+        }
+        var app = new Vue({
+            $el:''
+            data:data
+        })
+    </script>
+
+    <script>
+        var data = {//设置数据
+            msg:''
+            width:''
+            height:''
+        }
+
+        var data = new Vue{
+            $el : ''
+            data:data
+            computed:{//动态数据绑定
+                sieze:function(vm){size属性名,添加给vue实例化对象
+                    console.log(this,arguments)//页面调用两次size方法.但代码只执行一次,参数没有变
+                    retrun wm.width*wm.height
+                }
+            }
+        }
+    </script>
+
+    <script>
+        //双向数据绑定
+        var app = new Vue({
+            el :''//绑定视图
+            data:{//绑定数据
+                msg
+            }
+        })
+    </script>
+
+    <script>
+        <header v-on:click="changeTitle>
+            <h1></h1>
+        </header>
+        //子组件中定义触发事件方法
+        methods:{
+            changeTitle:fucntion(){
+                this.$emit('titleChanged',this.title)//事件,参数
+            }
+        }
+    </script>
+
+    <script>
+        //父组件中绑定接收事件的方法
+        <app-header v-on:titleChanged="updateTitle($event)></app-header>
+        methods:{
+            updateTitle(title){
+                this.title = title
+            }
+        }
+    </script>
+
+    <script>
+        <users v-bind:usersProps="users"></users>//父组件中将子组件的props属性绑定上值
+        props:['usersProps']//子组件中定义props属性
+    </script>
+
+
+
+</script>

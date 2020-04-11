@@ -1,0 +1,65 @@
+//克隆三部曲 for..in
+//判断是不是原始值 typeof() object
+//判断是数组还是对象 //instanceof tostring constructor
+//建立相应的数组或对象
+fucntion deepArray(origin,target){
+    var target = target || {};
+        tostr = object.prototype.tostring,
+        arrstr = "[object Array]";
+    for(let prop in origin){
+        if(object.hasOwnProperty/*避免拿到原型链的原型*/(prop)){
+            if(origin[prop] !== 'null' && typeof(Origin[prop]) == 'object'){
+               //tostr.call(origin[prop]) == arrstr){
+                   //target[prop] = [];
+               //}eles{
+                   //target[prop] = {};
+               //}
+               target[prop] = rostr.call(origin[prop]) == arrstr ? [] : {};
+                deepClone(origin[prop],target[prop]);
+            }eles{
+                target[prop] = origin[prop];
+            }
+        }
+    }
+    return target;
+}
+
+
+
+function isObject(o){
+    return Object.prototype.tostring.call(o) === "[objcet Objcet]"//预定义对象绝对等于对象
+}
+
+fucntion isArray(o){
+    return object.prototype.tostring.call(o) === "[object Array]"//预定义数组绝对等于数组
+}
+
+fucntion cloneDeep(target,source){
+    var target = target || {}
+    for(let o in source){//for..in循环查看类型
+        if(isObject(source[o])){//传入对象
+            target[o] = cloneDeep({},source[o])//进行目标值比对
+        }eles if(isArray(source[o])){//传入数组
+            target[o] = deepArray([],source[o])/进行目标值比对
+        }eles{
+            target[o] = source[o]//对象 = 数组
+        }
+    }
+    return target//闭包返回
+}
+
+fucntion deepArray(target,source){
+    var target = target || []
+    len = source.length;//获取字节长度
+    for(let i = 0; i < len; i++){//循环字节长度
+        if(isObject(source[i])){//传入对象
+            target[i] = cloneDeep({},source[i])//进行比对
+        }eles if(isArray(source[i]){//传入数组
+            target[i] = deepArray([],source[i])//进行比对
+        }eles{
+            target[i] = source[i]//对象 = 数组
+        }
+    }
+    return target
+}
+

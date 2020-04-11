@@ -1,0 +1,1027 @@
+视频学习方法
+ES6
+
+
+
+
+
+
+
+
+
+
+面向对象的思想
+面向对象程序开发灵活,每一个对象都是功能中心,分工明确
+面向对象具有灵活性,代码可重复,容易维护,多人进行大型项目
+面向对象
+封装性
+继承性
+多态性
+
+let和const命令
+let命令,用来声明变量.类似var,但所有声明的变量,只在let命令所在的代码块有效
+for循环特别之处,设置循环变量那部分是一个父作用域,而循环内部是一个单独子作用域
+
+let不存在变量提升
+var命令会发生"变量提升"现象,即变量可以在声明之前使用,值为undefined.按照一般逻辑,变量应该在声明语句之后在声明后使用
+let命令改变语法行为,它所声明的变量一定要在声明后使用,否则会发生报错
+
+暂时性死区
+只要块级作用域内存在let命令,声明的变量就"绑定"这个区域,不再受外部影响
+es6规定,如果区块中存在let和const命令,这个区块命令声明的变量,从一开始就形成封闭式作用域.凡是在声明之前就使用变量,会报错
+在代码块内,使用let命令变量之前,该变量都是不可用的,语法上,为暂时性死区
+暂时性死区也意味着typeof不再是一个百分百安全操作
+
+在没有let之前,typeof运算符是百分百安全,永远不会产生报错.现在一点不成立.良好编程习惯,变量一定要在声明之后使用,否则会发生报错,有些死区甚是隐蔽,不太容易被发现
+es6规定暂时性死区和let,const语句不出现变量提升,主要是为了减少运行时错位,防止在变量声明前使用这个变量,从而导致意料之外的行为.
+暂时性死区的本质,只要一旦进入当前作用域,所要使用的变量就已经存在,但是不可获取,只有等到声明变量的那一行代码出现,才可以获取和使用该变量
+
+不允许重复声明
+let不允许在相同作用域内,重复声明同一个变量
+因此,不能在函数内部重新声明参数
+
+块级作用域
+es5只有全局作用域和函数作用域,无块级作用域,带来很多不合理的场景
+
+第一种场景,内层变量可能会覆盖外层变量
+var tmp = new Date();//新建date函数
+function f() {
+  console.log(tmp);//打印出结果并以此查看数据如果同级没有边延伸至全局并直接取全局结果(外部无法访问内部函数)
+  if (false) {//第一步打印结果延伸全局便不会接着往下看所有条件包括循环条件(if值为false无法进入)
+    var tmp = 'hello world';
+  }
+}
+f(); // undefined
+
+第二种场景,计数的循环变量泄露为全局变量
+var s = 'hello';
+for (var i = 0; i < s.length; i++) {
+  console.log(s[i]);
+}
+console.log(i); // 5
+变量i只用来控制循环,循环结束后,并没有消失,则泄露成为全局函数
+
+es6的块级作用域
+let为javascript新增块级作用域
+function f1() {
+  let n = 5;
+  if (true) {
+    let n = 10;
+  }
+  console.log(n); // 5
+}
+上述代码都声明变量n,结果为5.这表示外层代码不受内层代码块的影响.如果两次使用var定义变量n,其结果才为10
+
+es6允许块级作用域的任意嵌套
+内层作用域可以定义外层作用域的同名变量
+块级作用域的出现,实际上广泛应用的匿名立即执行函数表达式(匿名iife)不必再需要
+// IIFE 写法
+(function () {
+  var tmp = ...;
+  ...
+}());
+
+// 块级作用域写法
+{
+  let tmp = ...;
+  ...
+}
+
+块级作用域与函数声明
+es5规定,函数只能在顶层作用域和函数作用域之中声明,不能在块级作用域声明
+
+// 情况一
+if (true) {
+  function f() {}
+}
+
+// 情况二
+try {
+  function f() {}
+} catch(e) {
+  // ...
+}
+
+综上所述根据es5的规定上面两种函数构造都是非法,但浏览器没有遵守该规定,为了兼容以前的旧代码,还是支持在块作用域之中声明函数,因此上面两种情况实际都能运行,不会报错
+es6引入了块级作用域,明确允许在块级作用域之中声明函数,es6规定,块级作用域之中,函数声明语句类似let,在块级作用域之外不可引用
+
+示例一
+function f() { console.log('I am outside!'); }
+(function () {
+  if (false) {
+    // 重复声明一次函数f
+    function f() { console.log('I am inside!'); }
+  }
+
+  f();
+}());
+上面代码在 ES5 中运行，会得到“I am inside!”，因为在if内声明的函数f会被提升到函数头部，实际运行的代码如下。
+// ES5 环境
+function f() { console.log('I am outside!'); }
+
+(function () {
+  function f() { console.log('I am inside!'); }
+  if (false) {
+  }
+  f();
+}());
+
+上述代码放至es6环境会发生报错,如果改变了块级作用域内声明的函数的处理规则,显然会对老代码产生很大影响,为减轻不兼容问题,浏览器的实现可以不遵守上面的规则,有自身的行为模式
+    允许在块级作用域内声明函数
+    函数声明类似于var,即会提升到全局作用域或函数作用域的头部
+    同时,函数声明还会提升到所在的块级作用域的头部
+上面三条规则只对es6的浏览器实现有效,其它环境的实现不用遵守,还是将块级作用域的函数声明当作let处理
+
+es6环境中,块级作用域内声明函数,行为类似var声明的变量
+
+实例
+// 浏览器的 ES6 环境
+function f() { console.log('I am outside!'); }
+(function () {
+  var f = undefined;
+  if (false) {
+    function f() { console.log('I am inside!'); }
+  }
+
+  f();
+}());
+// Uncaught TypeError: f is not a function
+
+考虑到环境导致的行为差距太大,应避免在块级作用域内声明函数,如确实需要,需写成函数表达式,而不是函数声明语句
+
+// 块级作用域内部的函数声明语句，建议不要使用
+{
+  let a = 'secret';
+  function f() {
+    return a;
+  }
+}
+
+// 块级作用域内部，优先使用函数表达式
+{
+  let a = 'secret';
+  let f = function () {
+    return a;
+  };
+}
+
+另外,还需注意一点.es6的块作用域必须是大括号,如果没有大括号,javascript引擎不存在块级作用域,在严格模式下,函数只能声明在当前作用域的顶层
+
+const命令
+const声明一个只读的常量,一旦声明,常量的值不能改变
+const声明的变量不能改变值,这就意味着,const一旦声明变量,就必须立即初始化,不能留到以后赋值
+const的作用域于let命令相同,只在声明所在的块级作用域内有效
+const命令声明的变量不提升,同样存在暂时性死区,只能在声明的位置后使用
+const声明的变量,也于let一样不可重复声明
+
+const本质
+const实际上保证,并不是变量的值不得改动,而是变量指向的地址内存所保存的数据不得进行改动.对于简单类型数据(数值(number),字符串(string),布尔值(boolean))
+值保存在变量指向的内存地址,因此等同于常量,对于复合型的数据(对象(objcet)和数组(Array)),变量指向的内存地址,保存的只是一个指向实际数据指针,const只能
+保证这个指针是固定的(即总是指向另一个固定的地址),至于它指向的数据结构是不是可变的,不能完全控制.因此,将一个对象声明为常量必须非常小心. 
+对对象进行冻结,使用object.freeze方法在原型进行中途拦截并进行冻结
+
+处对象本身冻结,还需将该对象下所有的属性进行冻结,下段代码将对象彻底冻结函数
+var constantize = (obj) => {
+  Object.freeze(obj);
+  Object.keys(obj).forEach( (key, i) => {
+    if ( typeof obj[key] === 'object' ) {
+      constantize( obj[k]ey );
+    }
+  });
+};
+
+es6声明变量的六种方法
+es5只有两种变量的方法:var命令和function命令,es6新增let和const命令,另外还新增两种方法import和class命令,所以ES6一共有六种方法
+
+顶层对象的属性
+顶层对象,在浏览器环境指的对象是全局对象window,在node指的是global对象.es5中,顶层对象的属性与全局变量等价
+
+实例
+window.a = 1;
+a // 1
+
+a = 2;
+window.a // 2
+上述代码顶层对象属性与全局设置变量一致.
+
+顶层对象的属性与全局挂钩,首先无法在编译就报出变量未经声明的错误,只有运行才知晓(全局变量可能是顶层对象的属性创造,而属性的创造是动态的),其次很容易不知不觉创造出全局变量,最后,顶层对象的属性
+是可以读写的,这非常不利于模块化编程,另一方面window对象有实体含义,指浏览器的窗口对象,顶层对象是一个有实体含义对象,也是不适合的
+es6为保持兼容性,var命令和function命令声明的全局变量,依旧是顶层对象属性,另一方面规定,let命令、const命令、class命令声明的全局变量,不属于顶层对象的属性,也就是说在es6开始,全局变量将开始逐步与顶层对象脱钩
+
+实例
+var a = 1;
+// 如果在 Node 的 REPL 环境，可以写成 global.a
+// 或者采用通用方法，写成 this.a
+window.a // 1
+let b = 1;
+window.b // undefined
+上述代码全局变量a由var声明,它是属于顶层对象;全局变量b由let声明,它不是顶层对象属性.
+
+globalthis对象
+javascript存在顶层对象,提供全局环境,所有代码都允许在该环境中,但顶层对象在各种实现不统一
+  浏览器里面,顶层对象是window,但node和web worker没有window
+  浏览器和web worker里面,seif也指向顶层对象,但node没有seif.
+  node里面,顶层对象是global,但其他环境均不支持
+同一段代码为了能够在各种环境,都能取到顶层对象,现一般使用this变量,但this是有局限性
+  全局环境中,this返回的顶层对象.但node模块和es6模块中,this返回的属当前模块
+  函数里this,如果函数不是作为对象的方法运行,而是单纯作为函数运行,this会指向顶层对象,严格模式下,这时this返回undefined
+  无论严格模式还是普通模式,new function('return this')(),总会返回全局对象.但,如果浏览器用了csp(content security policy,内容安全策略),那么evel,new function这些方法都可能无法使用
+
+综上所述,很难找到一种方法,可以在所有情况下,都能取到顶层对象,下面实例可勉强使用
+
+// 方法一
+(typeof window !== 'undefined'
+   ? window
+   : (typeof process === 'object' &&
+      typeof require === 'function' &&
+      typeof global === 'object')
+     ? global
+     : this);
+
+// 方法二
+var getGlobal = function () {
+  if (typeof self !== 'undefined') { return self; }
+  if (typeof window !== 'undefined') { return window; }
+  if (typeof global !== 'undefined') { return global; }
+  throw new Error('unable to locate global object');
+};
+es2020语言标准的层面,引入globalthis作为顶层对象,在任何环境下,globalthis都是存在的,都可以从它拿到顶层对象,指向全局环境下的this,垫片库global-this模拟该提案,可在所有环境下拿到globalthis
+
+
+变量的解构赋值
+
+数组的解构赋值
+es6允许按照一定模式,从数组和对象中提取,对变量进行赋值,称之为解构.以前,为变量赋值,只能直接指定
+let a = 1; let b = 2; let c = 3;
+在es6情况下允许写成数组的形式
+let [a, b, c] = [1, 2, 3];
+上述代码,可直接从数组中提值,按照对应的位置,对变脸进行赋值
+展开运算符(...)
+
+本质上,写法属于模式匹配,只要等号两边的模式相同,左边的变量赋值会被赋予对应的值
+
+实例
+let [foo, [[bar], baz]] = [1, [[2], 3]];
+foo // 1
+bar // 2
+baz // 3
+
+let [ , , third] = ["foo", "bar", "baz"];
+third // "baz"
+
+let [x, , y] = [1, 2, 3];
+x // 1
+y // 3
+
+let [head, ...tail] = [1, 2, 3, 4];
+head // 1
+tail // [2, 3, 4]
+
+let [x, y, ...z] = ['a'];
+x // "a"
+y // undefined
+z // []
+
+如果解析不成功,变量的值为undefined
+
+实例
+let [foo] = [];
+let [bar, foo] = [1];
+上述两段代码属于解构不成功,foo值都会等于undefined
+
+另外一种情况不完全解析,即等号左边的模式,只匹配一部分等号右边的数组,这种情况下,解析依旧成功
+
+实例
+let [x, y] = [1, 2, 3];
+x // 1
+y // 2
+
+let [a, [b], d] = [1, [2, 3], 4];
+a // 1
+b // 2
+d // 4
+上述代码,都不属于解析成功,但依旧能解析成功
+
+如果等号的右边不是数组(严格来说,不是可遍历的结构),那么将会解析错误并报错error is xxx  defined
+
+实例
+// 报错
+let [foo] = 1;
+let [foo] = false;
+let [foo] = NaN;
+let [foo] = undefined;
+let [foo] = null;
+let [foo] = {};
+
+上述代码都会报错,等号右边的值,要么转换为对象以后不具备iterator接口(前五个表达式),要么本身不具备interator接口(最后一个表达式)
+
+set数据结构函数,类似数组,但里面的元素都是唯一的,不重复的
+对于set结构,也可以使用数组的解构赋值
+事实上,只要某种数据结构具有iterator接口,都可以采用数组形式的解构赋值
+
+实例
+function* fibs() {
+  let a = 0;
+  let b = 1;
+  while (true) {
+    yield a;
+    [a, b] = [b, a + b];
+  }
+}
+
+let [first, second, third, fourth, fifth, sixth] = fibs();
+sixth // 5--为传参length数
+上述代码,fibs是一个generator函数,原生具有iterator接口.解析赋值会依次从这个接口获取值
+
+默认值
+解构赋值允许指定默认值
+
+实例
+let [foo = true] = [];
+foo // true
+let [x, y = 'b'] = ['a']; // x='a', y='b'
+let [x, y = 'b'] = ['a', undefined]; // x='a', y='b'
+注意,es6内部使用严格相等运算符(===),判断一个位置是否有值,只有当一个数组成员严格等于undefined,默认值才生效
+
+实例
+let [x = 1] = [undefined];
+x // 1
+let [x = 1] = [null];
+x // null
+上述代码,如果一个数组成员是null,默认值就不会生效,null不严格等于undefined
+
+对象的解构赋值
+解构不仅可以数组,也还适用于对象
+
+实例
+let { foo, bar } = { foo: 'aaa', bar: 'bbb' };
+foo // "aaa"
+bar // "bbb"
+
+对象的解构与数组有一个重要的不同.数组的元素是按次序排列,变量的取值由它所属位置决定,对象是没有次序,变量必须与属性同名,才能去到正确的值
+
+实例
+let { bar, foo } = { foo(属性名): 'aaa'(属性值), bar: 'bbb' };
+foo // "aaa"
+bar // "bbb"
+let { baz } = { foo: 'aaa', bar: 'bbb' };
+baz // undefined
+上述代码,等号左边的两个变量声明次序,与等号右边同名属性的次序不一致,但对取值完全没有影响.第二个例子的变量没有对应的同名属性,导致取不到值,最后等于undefined
+
+对象的解构赋值,可以方便将现有对象的方法,赋值到某个变量
+
+实例
+// 例一
+let { log, sin, cos } = Math;
+
+// 例二
+const { log } = console;
+log('hello') // hello
+上面代码的例一将Math对象的对数、正弦、余弦三个方法，赋值到对应的变量上，使用起来就会方便很多.例二将console.log赋值到log变量.
+
+如果变量名与属性名不一致
+
+实例
+let { foo: baz } = { foo: 'aaa', bar: 'bbb' };
+baz // "aaa"
+
+let obj = { first: 'hello', last: 'world' };
+let { first: f, last: l } = obj;
+f // 'hello'
+l // 'world'
+上述代码,对象的解构赋值是下面形式的简写
+let { foo: foo, bar: bar } = { foo: 'aaa', bar: 'bbb' };4
+
+也就是说,对象的解构赋值的内部机制,先找到同名属性,然后再赋值给对应的变量.真正被赋值则是后者,而不是前者
+
+实例
+let { foo: baz } = { foo: 'aaa', bar: 'bbb' };
+baz // "aaa"
+foo // error: foo is not defined
+上述代码,foo是匹配的模式,baz才是变量.真正赋值的是变量baz,而不是foo
+
+与数组一样,对象也可以嵌套结构用于解构
+
+实例
+let obj = {
+  p: [
+    'Hello',
+    { y: 'World' }
+  ]
+};
+
+let { p: [x, { y }] } = obj;
+x // "Hello"
+y // "World"
+
+三次解构赋值
+const node = {
+  loc: {
+    start: {
+      line: 1,
+      column: 5
+    }
+  }
+};
+
+let { loc, loc: { start }, loc: { start: { line }} } = node;
+line // 1
+loc  // Object {start: Object}
+start // Object {line: 1, column: 5}
+
+上述代码有三次解构赋值(多次嵌套对象并赋值),分别对ioc、start、line三个属性的解构赋值.最后一次line属性的解构赋值之中,只有line是变量,loc和start都是模式(对象嵌套名),不是变量
+
+对象的解构赋值可以取继承属性
+
+实例
+const obj1 = {};
+const obj2 = { foo: 'bar' };
+Object.setPrototypeOf(obj1, obj2);//原型链指定
+
+const { foo } = obj1;
+foo // "bar"
+
+注意点
+如果要将一个已经声明的变量用于解构赋值,必须非常小心
+// 错误的写法
+let x;
+{x} = {x: 1};
+// SyntaxError: syntax error
+上述代码因javascript引擎会将{x}理解成一个代码块,从而发生语法错误,只有不将大括号写在行首,避免javascript将其解释为代码块,才能解决这个问题
+// 正确的写法
+let x;
+({x} = {x: 1});
+上述代码将整个解构赋值语句,放在一个括号里,就可以执行
+
+({} = [true, false]);
+({} = 'abc');
+({} = []);
+
+上述代码解构赋值允许等号左边模式之中,不放置任何变量名,因此可写出非常古怪的赋值表达式,表达式虽毫无意义,但可以执行
+
+由数组本质是特殊对象,因此可以对数组进行对象属性的解构
+let arr = [1, 2, 3];
+let {0 : first, [arr.length - 1] : last} = arr;
+first // 1
+last // 3
+上述代码对数组见对象解析,数组arr的0位对应的值是1,[arr.length-1]就是2,对应的值是3.方括号写法,属于"属性名表达式"
+
+字符串解构赋值
+字符串也可以进行解构,字符串被转换成一个类似数组的对象
+
+实例
+const [a, b, c, d, e] = 'hello';
+a // "h"
+b // "e"
+c // "l"
+d // "l"
+e // "o"
+类似数组的对象都有长度length属性,因此还可以对这个属性解构赋值
+
+实例
+let {length : len} = 'hello';
+len // 5
+
+布尔值和数值的解构赋值
+解构赋值时,等号右边是数值和布尔值,则会转换为对象并进行解构
+
+实例
+let {toString: s} = 123;
+s === Number.prototype.toString // true
+
+let {toString: s} = true;
+s === Boolean.prototype.toString // true
+上述代码,数值和布尔值的包装对象都有tosring属性,因此变量s都能取到值
+
+let { prop: x } = undefined; // TypeError
+let { prop: y } = null; // TypeError
+上述代码解构赋值的规则,只要等号右边的值不是对象或数组,先将其转为对象.由undefined和null无法转为对象,所对它们进行解构赋值,都会报错
+
+函数参数的解构赋值
+函数的参数也可以使用解构赋值
+
+实例
+function add([x, y]){
+  return x + y;
+}
+add([1, 2]); // 3
+上述代码,函数add的参数表面是数组,但在传入参数的那一刻,数组参数就解构成变量x和y,对于函数内部的代码.
+
+实例
+function move({x = 0, y = 0} = {}) {
+  return [x, y];
+}
+
+move({x: 3, y: 8}); // [3, 8]
+move({x: 3}); // [3, 0]
+move({}); // [0, 0]
+move(); // [0, 0]
+上述代码,move的参数是一个对象,通过该对象进行解构,得到变量x和y的值,解构失败,x和y等于默认值
+
+实例
+function move({x, y} = { x: 0, y: 0 }) {
+  return [x, y];
+}
+
+move({x: 3, y: 8}); // [3, 8]
+move({x: 3}); // [3, undefined]
+move({}); // [undefined, undefined]
+move(); // [0, 0]
+上述代码函数move参数指定默认值,而不是x和y指定的默认值,会得到与前一种写法不同的结果undefined就会触发函数参数的默认值
+[1, undefined, 3].map((x = 'yes') => x);
+// [ 1, 'yes', 3 ]
+
+括号问题
+如果模式中出现括号如何处理,es6规则,只要有可能导致解构的歧义,就不得使用括号
+但,该规则实际不那么容易辨别,处理起来相当麻烦,因此建议只有能,就不在模式中放置括号
+
+不得使用括号情况
+变量声明
+函数构造
+赋值语句模式
+
+可以使用括号的情况
+赋值语句的模式部分,可使用括号
+
+实例
+[(b)] = [3]; // 正确
+({ p: (d) } = {}); // 正确
+[(parseInt.prop)] = [3]; // 正确
+上述代码语句都可执行,首先它们均为赋值语句,而不是声明语句,其它们括号均不属于模式的一部分
+
+用途
+变量的解构赋值用途甚广
+变换变量的值
+
+实例
+let x = 1;
+let y = 2;
+[x, y] = [y, x];
+
+函数返回多个值
+函数只能返回一个值,如需返回多个值,只能将其放入数组或对象里进行返回,有解构赋值,取值便方便许多
+
+实例
+// 返回一个数组
+function example() {
+  return [1, 2, 3];
+}
+let [a, b, c] = example();
+
+// 返回一个对象
+function example() {
+  return {
+    foo: 1,
+    bar: 2
+  };
+}
+let { foo, bar } = example();
+
+函数参数定义
+解构赋值可方便将一组数据与变量名对应
+
+实例
+// 参数是一组有次序的值
+function f([x, y, z]) { ... }
+f([1, 2, 3]);
+
+// 参数是一组无次序的值
+function f({x, y, z}) { ... }
+f({z: 3, y: 2, x: 1});
+
+提取json数据
+解构赋值对提取json对象中的数据,尤其可用
+
+实例
+let jsonData = {
+  id: 42,
+  status: "OK",
+  data: [867, 5309]
+};
+let { id, status, data: number } = jsonData;
+console.log(id, status, number);
+// 42, "OK", [867, 5309]
+上述代码可快速抓取数据
+
+函数参数的默认值
+
+实例
+jQuery.ajax = function (url, {
+  async = true,
+  beforeSend = function () {},
+  cache = true,
+  complete = function () {},
+  crossDomain = false,
+  global = true,
+  // ... more config
+} = {}) {
+  // ... do stuff
+};
+上述代码指定参数的默认值,避免在函数内部再写var foo = config.foo || defaultfoo这样的语句
+
+遍历map结构
+任何部署iterator接口的对象,可以使用for...of循环遍历,map结构原生支持iterator接口,配合变量的解构赋值,获值键名和键值非常方便
+
+实例
+const map = new Map();
+map.set('first', 'hello');
+map.set('second', 'world');
+
+for (let [key, value] of map) {
+  console.log(key + " is " + value);
+}
+// first is hello
+// second is world
+
+如果只需要单独取值或名可采用下述条件
+// 获取键名
+for (let [key] of map) {
+  // ...
+}
+
+// 获取键值
+for (let [,value] of map) {
+  // ...
+}
+
+输入模块指定方法
+加载模块时,往往需指定输入那些方法,解构赋值使得输入语法非常清晰
+
+实例
+const { SourceMapConsumer, SourceNode } = require("source-map");
+
+字符串扩展
+字符的unicode支持,允许采用\uxxxx形式表示一个字符,其中xxxx表示字符的Unicode码点"\u0061"//a
+这只表示法只限于码点\u0000~\uffff之间的字符,超出该字符范围,必须用两个双字节形式表示
+
+实例
+"\u{20BB7}"
+// "𠮷"
+
+"\u{41}\u{42}\u{43}"
+// "ABC"
+
+let hello = 123;
+hell\u{6F} // 123
+
+'\u{1F680}' === '\uD83D\uDE80'
+// true
+上述代码,最后一例表明,括号表示与四字节utf-16编码等价
+有该方法后,script共有六种方法表示一个字符
+'\z' === 'z'  // true
+'\172' === 'z' // true
+'\x7A' === 'z' // true
+'\u007A' === 'z' // true
+'\u{7A}' === 'z' // true
+
+字符串遍历接口
+es6为字符串添加遍历接口,使得字符串可以被for...of循环遍历
+
+实例
+for (let codePoint of 'foo') {
+  console.log(codePoint)
+}
+// "f"
+// "o"
+// "o"
+除
+
+直接输入后U+xxx和u+2029
+javascript字符串允许直接输入等,以及输入字符的转义形式.
+
+实例javascript规定5个字符,不能在字符串里面直接使用,只能使用转义形式
+U+005C：反斜杠（reverse solidus)
+U+000D：回车（carriage return）
+U+2028：行分隔符（line separator）
+U+2029：段分隔符（paragraph separator）
+U+000A：换行符（line feed）
+举例来说，字符串里面不能直接包含反斜杠，一定要转义写成\\或者\u005c.
+
+该规定本身是没有问题的,麻烦在于json格式允许字符串里面直接使用.
+
+注意,模板字符串现在允许直接输入这两字符串,另外,正则表达式不允许直接输入这两个字符串,json本身不允许直接包含正则表达式
+
+json.stringify()改造
+根据标准,json数据必须是utf-8编码,现json.stringify方法有可能返回不符合utf-8标准字符串
+utf-8标准规定,0xd800到0xdfff之间的编码,不能进行单独使用,必须配合使用
+
+比如，\uD834\uDF06是两个码点，但是必须放在一起配对使用，代表字符𝌆。这是为了表示码点大于0xFFFF的字符的一种变通方法。
+单独使用\uD834和\uDFO6这两个码点是不合法的，或者颠倒顺序也不行，因为\uDF06\uD834并没有对应的字符。
+
+json.stringify()问题在于,它可能返回0xd800与0xdfff之间的单个码点
+
+实例
+JSON.stringify('\u{D834}') // "\u{D834}"
+
+为确保返回合法utf-8字符,es改变json.stringify()行为
+如遇到0xd800与0xdfff之间的单个码,或不存在的配对形式,它会返回转义字符串,留给应用自行决定下一步处理
+
+实例
+JSON.stringify('\u{D834}') // ""\\uD834""
+JSON.stringify('\uDF06\uD834') // ""\\udf06\\ud834""
+
+模板字符串
+传统javascript,输出模板通常像以下写法
+$('#result').append(
+  'There are <b>' + basket.count + '</b> ' +
+  'items in your basket, ' +
+  '<em>' + basket.onSale +
+  '</em> are on sale!'
+);(该方法中采用jquery方法)
+
+ES6引入模板字符串解决该问题
+$('#result').append(`
+  There are <b>${basket.count}</b> items
+   in your basket, <em>${basket.onSale}</em>
+  are on sale!
+`);
+上述代码简化jQuery原生写法采用(``)标记,可当做普通字符串使用,也可以定义多行字符串,或在字符串中进行嵌套变量
+
+实例
+// 普通字符串
+`In JavaScript '\n' is a line-feed.`
+
+// 多行字符串
+`In JavaScript this is
+ not legal.`
+
+console.log(`string text line 1
+string text line 2`);
+
+// 字符串中嵌入变量
+let name = "Bob", time = "today";
+`Hello ${name}, how are you ${time}?`
+
+$('#list').html(`
+<ul>
+  <li>first</li>
+  <li>second</li>
+</ul>
+`);
+上述代码,所有空格模板都会保留,例如表单组件默认换行,不想换行,即可使用trim方法进行消除
+
+$('#list').html(`
+<ul>
+  <li>first</li>
+  <li>second</li>
+</ul>
+`.trim());
+
+function authorize(user, action) {
+  if (!user.hasPrivilege(action)) {
+    throw new Error(
+      // 传统写法为
+      // 'User '
+      // + user.name
+      // + ' is not authorized to do '
+      // + action
+      // + '.'
+      `User ${user.name} is not authorized to do ${action}.`);
+  }
+}
+上述代码括号内部可放在任意javascript表达式,可进行运算,及引用对象属性
+
+模板字符串能调用函数
+let x = 1;
+let y = 2;
+
+`${x} + ${y} = ${x + y}`
+// "1 + 2 = 3"
+
+`${x} + ${y * 2} = ${x + y * 2}`
+// "1 + 4 = 5"
+
+let obj = {x: 1, y: 2};
+`${obj.x + obj.y}`
+// "3"
+
+如括号中的值不是字符串,内部将按照统一转化成字符串,如括号中是对象,将默认调用tostring方法
+
+模板字符串可嵌套
+const tmpl = addrs => `
+  <table>
+  ${addrs.map(addr => `
+    <tr><td>${addr.first}</td></tr>
+    <tr><td>${addr.last}</td></tr>
+  `).join('')}
+  </table>
+`;
+
+简化嵌套模板字符串方法,若需要引用模板字符串本身,需要时执行,可写成函数
+const  data = [
+  {first:'<jane>,first:'bond''},
+  {first:'<jane>,first:'bond''}
+]
+console.log(templat(data))
+
+实例：模板编译
+let templat = `
+  <ul>
+    <% for (let i = 0;i < data.lenght; i ++){
+      %><li>%<= data.suplies[i]%>
+      <%}%>
+  </ul>
+  }
+`;
+上述代码,模板字符串,放置在常规模板中.该模板采用<%...%>放置javascript,使<%=...%>输出javascript表达式
+
+模板编译函数compile
+function compile(template){//------compile = script() + template()
+  const evalExpr = /<%=(.+?)%>/g;
+  const expr = /<%([\s\S]+?)%>/g;
+
+  template = template
+    .replace(evalExpr, '`); \n  echo( $1 ); \n  echo(`')
+    .replace(expr, '`); \n $1 \n  echo(`');
+
+  template = 'echo(`' + template + '`);';//保存至外部
+
+  let script =
+  `(function parse(data){
+    let output = "";
+
+    function echo(html){
+      output += html;
+    }
+
+    ${ template }
+
+    return output;//闭包保留等待调用
+  })`;
+
+  return script;//闭包返回
+}
+
+compile函数用法
+let parse = eval(compile(template));
+div.innerHTML = parse({suplies:['broom','mop','leaner']});
+
+标签模板
+它可以紧跟在一个函数名后,该函数将被调用处理模板字符串,该称为'标签模板'(tagged template).
+alert`hello`
+// 等同于
+alert(['hello'])
+标签模板并不是模板,只是调用函数的一种特殊形式.'标签'指函数,紧跟在后面的模板字符串就是它的参数
+
+如果模板字符串里有参数,就不在是简单调用,而是会将模板字符串先处理成多个参数,再调用函数
+let a = 5;
+let b = 10;
+
+tag`Hello ${ a + b } world ${ a * b }`;
+// 等同于
+tag(['Hello ', ' world ', ''], 15, 50);
+
+模板字符串前有一个tag就是它的标识名,它是一个函数.整个表达式返回的值,tag函数处理模板字符串后的返回值
+
+函数tag依次会接收多个参数
+function tag(stringArr, value1, value2){
+  // ...
+}
+// 等同于
+function tag(stringArr, ...values){
+  // ...
+}
+
+tag函数的第一个参数是一个数组,该数组的成员是模板字符串那些没有变量替换的部分,简单来说变量替换只发生在第一个参数与第二个参数之间,第二个参数与第三个参数之间,以此类推
+tag函数的其他参数,都是模板字符串各个变量被替换后的值
+
+实例
+let total = 30;
+let msg = passthru`The total is ${total} (${total*1.05} with tax)`;// The total is ${30} (${30*1.05} with tax)---The total is 31.5 with tax
+function passthru(literals) {
+  let result = '';
+  let i = 0;
+  while (i < literals.length) {
+    result += literals[i++];
+    if (i < arguments.length) {
+      result += arguments[i];
+    }
+  }
+  return result;
+}
+msg // "The total is 30 (31.5 with tax)"
+
+passthru函数采用rest参数
+方法
+function passthru(literals, ...values) {
+  let output = "";
+  let index;
+  for (index = 0; index < values.length; index++) {
+    output += literals[index] + values[index];
+  }
+  output += literals[index]
+  return output;
+}
+"模板标签一个重要应用,过滤html字符串,防止用户输入恶意内容"
+
+实例
+let message =
+  SaferHTML`<p>${sender} has sent you a message.</p>`;
+
+function SaferHTML(templateData) {--通过定义saferHtml方法将数组传入templateData进行函数处理
+  let s = templateData[0];
+  for (let i = 1; i < arguments.length; i++) {
+    let arg = String(arguments[i]);
+    // Escape special characters in the substitution.---替换特殊字符串
+    s += arg.replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+    // Don't escape special characters in the template.---不转换特殊字符串
+    s += templateData[i];
+  }
+  return s;
+}
+上述代码,sender变量往往是用户提供的,经过saferHtml函数进行处理,特殊字符都会转义
+
+实例
+let sender = '<script>alert("abc")</script>'; // 恶意代码
+let message = SaferHTML`<p>${sender} has sent you a message.</p>`;
+message
+// <p>&lt;script&gt;alert("abc")&lt;/script&gt; has sent you a message.</p>
+
+标签模板的另一个应用,多语言转换(国际化处理)
+实例
+i18n`Welcome to ${siteName}, you are visitor number ${visitorNumber}!`
+// "欢迎访问xxx，您是第xxxx位访问者！"
+
+模板字符串本身并不能取代mustache之类的模板库,因没有条件判断和循环处理功能,通过标签函数,可添加功能
+
+模板字符串的限制
+模板字符串里面,可以内嵌其他语言,但模板字符串默认会将字符串转义,导致无法嵌入其他语言
+
+实例
+function latex(strings) {
+  // ...
+}
+let document = latex`
+\newcommand{\fun}{\textbf{Fun!}}  // 正常工作
+\newcommand{\unicode}{\textbf{Unicode!}} // 报错
+\newcommand{\xerxes}{\textbf{King!}} // 报错
+Breve over the h goes \u{h}ere // 报错
+
+上述代码,变量document内嵌模板字符串,对于latex语言来说完全合法,但javascript引擎会无法解析,其原因就是模板字符串会进行转义
+为解决es18对标签模板放松限制.如遇到不合法字符串转义,则返回undefined,而不是报错,并且从raw属性上可得到原始字符串
+
+实例
+function tag(strs) {
+  strs[0] === undefined
+  strs.raw[0] === "\\unicode and \\u{55}";
+}
+tag`\unicode and \u{55}`
+
+这种对字符串转义的放松,只在标签模板解析字符时生效,不是标签模板的场合,依旧会报错 
+
+字符串的新增方法
+string.fromcodepoint()
+es5提供string.fromcodepoint()方法,用于从unicode码点返回对应字符,但该方法不能识别大于0xffff的字符
+
+String.fromCharCode(0x20BB7)
+// "ஷ"
+上述代码,string.fromcodepoint无法识别大于0xffff的码点
+
+es6提供string.fromcodepoint()方法,可识别大于0xffff的码点,弥补string.fromcharcode()方法的不足,在作用上正好与,codePointat()方法相反
+实例
+String.fromCodePoint(0x20BB7)
+// "𠮷"
+String.fromCodePoint(0x78, 0x1f680, 0x79) === 'x\uD83D\uDE80y'
+// true
+上述代码,如string.fromcodepoint方法有多个参数,则它们会被合并成一个字符串返回
+注:fromcodepoint方法定义在string对象上,而codePointAt方法定义在实例对象上
+
+string.raw()
+es6还原原生string对象,提供一个raw()方法,该方法返回一个斜杠都会被转义的字符串,往往用于模板字符串的处理方法.
+
+实例
+String.raw`Hi\n${2+3}!`
+// 实际返回 "Hi\\n5!"，显示的是转义后的结果 "Hi\n5!"
+
+String.raw`Hi\u000A!`;
+// 实际返回 "Hi\\u000A!"，显示的是转义后的结果 "Hi\u000A!"
+如原字符串的斜杠已被转义,则string.raw()会再次进行转义
+
+实例
+String.raw`Hi\\n`
+// 返回 "Hi\\\\n"
+String.raw`Hi\\n` === "Hi\\\\n" // true
+上述string.raw()方法可以作为处理模板字符串的基本方法,它会将所有变量替换,且对斜杠进行转义,方便下一步作为字符串来使用
+string.raw()本质上是一个正常函数,只是专用于模板字符串的标签函数.如写成正常函数的形式,它的第一个参数,应该是一个具有raw属性的对象,且raw属性的值是一个数组,对应模板字符串解析后的值
+
+实例
+// `foo${1 + 2}bar`
+// 等同于
+String.raw({ raw: ['foo', 'bar'] }, 1 + 2) // "foo3bar"
+上述代码,string.raw()方法的第一个参数是一个对象,它的raw属性等于原始的模板字符串解析后的数组
+
+作为函数,string.raw()代码实现基本
+实例
+String.raw = function (strings, ...values) {
+  let output = '';
+  let index;
+  for (index = 0; index < values.length; index++) {
+    output += strings.raw[index] + values[index];
+  }
+  output += strings.raw[index]
+  return output;
+}
+
+实例方法:codePointAt()

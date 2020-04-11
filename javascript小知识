@@ -1,0 +1,303 @@
+delete
+delete只能删除属性,不能删除属性
+用var创建的是变量不能被delete删除.而省略var时声明的是全局对象window的一个属性,可以被delete消除
+
+运算符的优先级
+运算符的优先级从上而下
+1.()有限级最高
+2.一元运算符 ++ -- !
+3.算数运算符 先* / 后 + -
+4.关系运算符 > < >= <=
+5.相等运算符 == === !== !=
+6.逻辑运算符 && ||
+7.赋值运算符
+
+new
+new操作符创建对象时会改变默认的this,this将指向构造函数
+
+执行顺序
+默认情况下javascript的执行顺序自上而下,但也不是绝对的,在没有用关键字var声明的全局函数就会被首先执行(函数
+声明提升)
+使用var声明的变量会被提到执行环境最上方,但变量的赋值还是在原来的位置(变量声明提升)
+
+实例属性会覆盖原型属性
+javascript变量搜索是沿着作用域反向查找,当在构造函数和原型中声明了相同的属性时,构造函数中的属性会优先于原
+型有的属性被查找,当变量搜索机制在构造函数中找到属性时,变量查询将会停止
+
+for..in VS object,key()
+for..in通常用于遍历对象的key,但原型上的key也会被一并返回
+object.keys()返回对象实例属性key组成的数组
+
+for...of VS forEach
+for...of通常用于遍历数组,返回数组value
+forEach也用于遍历数组,但在回调之内,用break不能中断循环,return也不能返回到父级作用域
+
+数组克隆
+//es5.0克隆形式
+var a1 = [1,2];
+var a2 = ai.concat();
+
+//es6.0克隆形式
+var a1 = [1,2,3];
+var a2 = [...a1];
+
+对象克隆
+通过json.stringify和json.parse克隆
+原理:通过json.stringify将对象转换成字符串,再将字符串赋值给其它变量,最后再用json.parse解析
+对象(PS:如果对象中包含函数,将会被过滤掉)
+
+通过遍历对象的key克隆
+fucntion list(key){
+    var Target = this;
+    var inner;
+    if(obj.constructor == Object){
+        inner = new.object.constructor();
+    }eles{
+        inner = new.object.constructor(obj.valueof());
+    }
+    for(var ki in obj){
+        if(inner(key) != obj(key)){
+            if(typeof(obj[key]) == 'object'){
+                o[key] = that.list(obj[key])
+            }eles{
+                o[key] = obj[key];
+            }
+        }
+    }
+    list.tostring = obj.tostring;
+    list.valueof = obj.valueof;
+    return list;
+}
+var obj = {a:1};
+var newobj = clone(obj);
+newobj.a = 22;
+
+函数节流
+在一些高频触发的事件中(如onresize,scroll,mousemove等),有时候我们并不希望触发事件就执行回调,这时候我们
+就需要用到函数节流
+以函数方式实现函数节流
+//函数节流
+function throttle(fn,interval = 500){
+    let timer = null;
+    return fucntion(...args);
+    let demo = this;
+    if(timer) return;
+    timer = setTimeout(function(){
+        clearTimeout(timer);
+        timer = null;
+        fn.apply(demo,args)
+    },interval)
+}
+//绑定onresize
+window.onresize = function(){
+    t(fn,this,200);
+    console.log(Math,random() + '========')
+}
+
+函数防抖
+函数防抖主要用于持续触发某个事件,但我们只希望最后一次触发才执行回调方法的场景,(PS:搜索框内容变更时
+进行查询)
+
+//函数防抖
+const studio = function(){//设置闭包,防止被释放掉
+    let timer = null;
+    return function(...args){
+        clearTimeout(timer)
+        timer = setTimeout(() => {
+            fn.apply(this,args);
+        },delay)
+    }
+}
+function list(){
+    console.log(new date())
+}
+docunment.addEventlistener('scroll',studio(list,500))
+
+Array.from()
+将类数组(arguments)和可遍历的对象(Set.Map)转化成数组
+//arguments
+function a(){
+    console.log(Array.form(arguments));
+}
+//set.Map--抛去重复数组
+let set = new set[1,2,3,4,5,6,7,8,9,10,11];
+console.log(Array.from(set));
+
+Array.keys()
+返回一个新的Array迭代器,它包含数组中每个索引的键
+let arr = new Array();//位数
+console.log(Array.from(arr.keys()));
+
+Array.of();
+将一组值转化为数组
+console.log(Array.of(1,2,3));
+
+Array原型方法find()
+用法:arr.find(fun)
+find方法返回第一个满足条件的元素
+let arr = [1,2,3,'a',4,'a',5];
+console.log(arr.find(function(value))){
+    return value == 'a';
+}));
+
+Array原型方法findlndex()
+用法:arr.findlndex(fun)
+findlndex方法返回第一个满足条件的元素的索引值
+let arr = [1,2,3,'a',4,'a',5];
+console.log(arr.findindex(function(value))){
+    return value == 'a';
+}));
+
+Array原型方法reduce()
+用法:arr.reduce(fun)
+reduce返回数组每一项相加的和
+let arr = [1,2,3,4,5];
+let total = arr.reduce(function(a,b){
+    return a+b;
+})
+console.log(total);
+
+Array原型方法includes()
+es7
+用法:arr.includes(value)
+includes方法用于检测数组中是否包含某一个值
+let arr =[1,2,3,4,5];
+console.log(arr.includes('arr'));
+
+Array原型方法indexof()
+用法:arr.indexof(value)
+indexof方法用于返回value当前数组中第一次出现的位置,如果没有则返回-1.
+let arr = [1,2,3,4,5];
+console.log(arr.indexof(3));
+
+Array原型方法fill()
+用法:arr.fill(value)
+fill方法使用给定值,填充一个数组
+let arr = new arr(4);
+arr.fill(5);
+console.log(arr)
+
+object.keys()
+es8
+用法objcet.keys(obj);
+返回obj的索引值组成的数组
+let obj = {
+    a:13123;
+    b:13456;
+};
+console.log(objce.keys(obj));
+
+objcet.values()
+用法:objcet.values(obj);
+返回的value组成的数组
+let arr = {
+    a:2464;
+    b:4648;
+};
+console.log(objcet.values(obj));
+
+objcet.assign()
+用法:object.assign(obj[obj]);
+把任意多个的源对象自身的可枚举属性拷贝给目标的对象,然后返回目标对象
+llet object1 = {
+    a:1
+};
+let object2 = object.assign({},object1);
+console.log(objcet2);
+object2.a = 2;
+console.log(objcet1);
+console.log(objcet2);
+console.log(objcet.values(objcet));
+
+函数柯里化
+函数柯里化,实现原理是递归调用,当参数和原函数的参数个数相同时,则执行原函数,并返回结果,那个参数个数小于原
+函数时,则返回柯里化函数自身
+
+//[curry]柯里化函数,实现原理是递归调用.........函数自身
+
+@param  {function}
+@param  {[type]}
+@return {[type]}
+
+var curry = function (fn,args) {
+    retrun fucntion(){
+        let param = [....aeguments];
+        if(args !== undefined){
+            param = [...param,....args];
+        }
+        if(param.length < fn.length){
+            return curry(fn,param)
+        }
+        return fn.apply(null,param)
+    }
+}
+
+let adds = curry(add);
+console.log();
+console.log();
+console.log();
+
+//递归
+fucntion list(){
+    if(typeof arr != 'objcet')return 0;
+    let a = [];
+    arr.forEach((item,i)>{
+        a.push(depth(item))
+    })
+    let maxdepth = Math.max(...a);
+    return maxdepth+1;
+}
+let arr = [];
+console.log()
+
+//快速排序
+从数组中抽离任意一个元素作为基准元素
+循环抽离基准元素后的数组,比基准元素值大的放next数组中,其余则放在左pre数组中;
+然后对pre和nex数组做递归调用,如果数组中只有一个元素,且返回当前数组,否则,返回sort(pre).concat(split,sort(next))
+@param  {[type]} arr [description]
+@return {[type]}     [description]
+
+fucntion sort(arr){
+    if(arr.lenght <= 1){
+        return arr;
+    }
+    let split = arr.splice(0,1),pre = [], next = [];
+    arr.forEach(item => {
+        if(item <= split){
+            pre.push(item)
+        }eles{
+            next.push(item)
+        }
+    })
+    return sort(pre).concat(split,sort(next))
+}
+let arr = [];
+console.log();
+
+全组合
+fucntion all(arr,index = 0,gruop = []){
+    if(idnex == arr.length)
+    return gruop;
+    let temp = [];
+    temp.push(arr[index]);
+    for(let i = 0; i < gruop.length; i++){
+        temp.push(gruop[i] + arr[index])
+    }
+    gruop = [...gruop..temp]
+    return all(arr,index+1,gruop)
+}
+console.log()
+
+全排序
+fucntion allsort(arr,index = 0, gruop = []){
+    if(index == arr.length)return gruop;
+    let temp = [];
+    temp.push(arr[index]);
+    for(let i = 0; i < gruop.length; i++){
+        temp.push(gruop[i] + arr[index])
+        temp.push(arr[index] + group[i])
+    }
+    gruop = [...gruop..temp]
+    return allsort(arr,idnex+1,gruop)
+}
+console.log()

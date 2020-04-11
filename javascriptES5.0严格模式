@@ -1,0 +1,18 @@
+//错误信息
+try{}catch(){}finally{}
+Error.name的六种值对应的信息
+EvalError:eval()的使用与定义不一致
+RangeError:数值越界
+ReferenceError:非法或不能识别的引用数值
+SyntaxError:发生语义解析错误
+TypeError:操作类型错误
+URlError:URl处理函数使用不当
+
+//严格模式
+use strict
+    不再兼容ES3.0的一些不规则语法.使用全新Es5.0规范
+    两种方法
+        全局严格模式
+        局部函数内严格模式
+不支持with,arguments,callee,func,caller,变量赋值前必须声明,局部this必须被赋值(person,call(null/undefined))
+拒绝重复属性和参数
