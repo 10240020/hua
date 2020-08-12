@@ -1,1 +1,125 @@
+原生js会等待dom一切加载完毕之后,并执行下一步
+jQuery不会等待dom加载完后,并会执行下一步
 
+原生js创建多个入口函数会被后创建覆盖
+jQuery创建多个入口函数不会被覆盖
+
+jQuery入口函数多重写法
+$().reday();
+jquery().reday();
+$(function(){});
+
+$.extend()工具调用     $.fn.extend()实例方法调用
+
+jquery冲突问题
+释放jQuery中$使用权
+jquery.noConflict();
+$释放之后不能再使用$选择
+自定义使用权
+var xx =jquery.onConflict();
+xx(function(){})
+
+jquery核心函数
+$();入口函数
+var xx = $('');
+var xx = $('<x></x>');
+
+jquery对象是一个伪数组
+伪数组
+由0到length-1,并且有length属性
+
+jQuery静态方法和实例方法
+静态方法直接给类添加方法
+实例方法准确来说是new xxx();构造函数,在原先上定义方法  然后new xxx 面向原型对象编程
+
+jQueryEach方法
+arr.foreach(function(){})第一个参数遍历元素 第二个遍历当前索引
+原生foreach只能遍历数组  jQuery可遍历对象及数组 jQuery先传索引位  第二个参数遍历元素
+
+map方法可传三个参数
+第一个参数:当前遍历的元素
+第二个参数:当前遍历到的索引
+第三个参数:当前被遍历的数组
+jQueryMap方法
+第一个参数:要遍历的数组
+第二个参数:每遍历一个元素之后执行的回调函数
+回调函数的参数
+第一个参数:遍历到的元素
+第二个参数:遍历到的索引
+注意点
+和jQuery中的each静态方法一致,map静态方法也可以遍历伪数组
+jQuery中的each静态方法和map静态方法的区别
+each静态方法默认的返回值是,遍历谁返回谁
+map静态方法默认的返回值是一个空数组
+each静态方法不支持在回调函数中对遍历的数组进行处理
+map静态方法可以在回调函数中通过return对遍历的数组进行处理,返回一个全新的数组
+
+jQuery其它静态方法
+$.trim()方法
+作用:去除字符串两端的空格
+参数:需要去除空格的字符串
+返回值:去除之后返回的字符串
+jquery框架本质是一个函数
+$.iswindow();
+作用:判断传入的对象是window对象
+返回值:true/false
+
+$.isArray();
+作用:判断传入是否是真数组,伪数组不能判断
+返回值:true/false
+
+$.isFunction()
+$.isObjcet()
+
+$.holdReady()静态方法
+作用:暂停ready入口函数的执行
+
+内容选择器jquery
+:empty()选择器 作用:找到既没有文本内容也没有子元素的指定元素
+var name = $('div:empty')
+
+:parent()选择器 作用:找到既有文本也有子元素的指定元素
+var ide = $('div:parent');
+
+:has()选择器 作用:找到有子元素的指定元素
+var mum = $('div:has');
+
+:contains()选择器 作用:找到有文本的元素的指定元素
+var obj = $('div:contains');
+
+属性和属性节点
+对象.属性名称 = 值 赋值
+对象.属性名称 获取值
+
+在编写HTML代码时,在HTML标签中添加的属性就是属性节点
+
+
+jQueryattr方法
+attr(name|pro|key,val|fn)
+作用:获取或者设置属性节点的值
+可以传递一个参数,也可传递多个参数
+传递一个参数,代表获取属性节点的值
+传递多个参数,代表设置属性节点的值
+注意点
+无论找到多少个元素,都只会返回第一个元素指定的属性节点的值
+找到多少个元素就会设置多少个元素
+如果设置节点不存在,那么该节点会自动新增为属性
+removeAttr()会删除所有找到元素指定的属性节点
+
+jQueryprop方法
+$().eq().prop() eq()查找相同元素
+prop方法和attr方法一致
+removeProp方法和removeAttr方法一致
+注意点
+prop方法不仅能够操作属性,还能操作属性节点
+
+推荐在操作属性节点时,具有true和false两个属性节点,如checked,selected或者disabled使用prop(),其它均使用attr()方法
+
+jQuery操作类相关的方法
+addClass()
+作用:添加类
+如果添加多个类,多个类名之间用空格分割开
+removeClass()
+作用:删除一个类或多个类
+toggleClass()
+作用:切换类
